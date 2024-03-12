@@ -25,6 +25,8 @@
 package com.iluwatar.promise;
 
 import io.github.pixee.security.BoundedLineReader;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -99,7 +101,7 @@ public class Utility {
    */
   public static String downloadFile(String urlString) throws IOException {
     LOGGER.info("Downloading contents from url: {}", urlString);
-    var url = new URL(urlString);
+    var url = Urls.create(urlString, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     var file = File.createTempFile("promise_pattern", null);
     try (var bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
          var writer = new FileWriter(file)) {
